@@ -8,7 +8,7 @@ MeloWave, plateforme de streaming musical, veut éclairer ses choix éditoriaux.
 
 - **Outils :** Python, pandas, SciPy, statsmodels, scikit-learn, Prophet, Matplotlib, Seaborn, Jupyter
 - **Volume :** 114 000 lignes (89 740 morceaux uniques), classements quotidiens 2017-2020
-- **Livrables :** 2 notebooks, présentation des résultats ([PDF](presentation_melowave.pdf))
+- **Livrables :** 2 notebooks, présentation des résultats ([FR](presentation_melowave.pdf) · [EN](presentation_melowave_en.pdf))
 
 ---
 
@@ -51,7 +51,8 @@ MeloWave, plateforme de streaming musical, veut éclairer ses choix éditoriaux.
 |---|---|
 | `analyse_catalogue_melowave.ipynb` | Mission 1 : audit qualité, profil audio, tests statistiques |
 | `prevision_activite.ipynb` | Mission 2 : série temporelle, Prophet, rythme de sortie |
-| `presentation_melowave.pdf` | Présentation des résultats |
+| `presentation_melowave.pdf` | Présentation des résultats (français) |
+| `presentation_melowave_en.pdf` | Présentation des résultats (anglais) |
 | `requirements.txt` | Bibliothèques Python |
 | `README.md` / `README.en.md` | Documentation en français / en anglais |
 

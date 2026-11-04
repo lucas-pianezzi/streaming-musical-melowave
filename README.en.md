@@ -1,14 +1,14 @@
 [Français](README.md) | **English**
 
-# Catalog Audit, Statistical Tests & Forecasting (MeloWave)
+# Catalogue Audit, Statistical Tests & Forecasting (MeloWave)
 
 ## At a glance
 
-MeloWave, a music streaming platform, wants to support its editorial decisions. I audited its Spotify catalog, statistically tested three hypotheses from the editorial committee (Mission 1), then forecast Pop's presence in the global Top 200 with Prophet (Mission 2).
+MeloWave, a music streaming platform, wants to support its editorial decisions. I audited its Spotify catalogue, statistically tested three hypotheses from the editorial committee (Mission 1), then forecast Pop's presence in the global Top 200 with Prophet (Mission 2).
 
 - **Tools:** Python, pandas, SciPy, statsmodels, scikit-learn, Prophet, Matplotlib, Seaborn, Jupyter
 - **Volume:** 114,000 rows (89,740 unique tracks), daily charts 2017-2020
-- **Deliverables:** 2 notebooks, results presentation ([PDF, in French](presentation_melowave.pdf))
+- **Deliverables:** 2 notebooks, results presentation ([EN](presentation_melowave_en.pdf) · [FR](presentation_melowave.pdf))
 
 ---
 
@@ -16,7 +16,7 @@ MeloWave, a music streaming platform, wants to support its editorial decisions. 
 
 - **Missing values:** only on text fields (< 0.001% of rows); rows dropped with no bias on the audio analyses.
 - **Duplicates:** two working datasets. `df_genres` keeps every track-genre pair (113,549 rows); `df_tracks` is deduplicated on `track_id` (89,740 tracks). The same track can legitimately belong to several genres.
-- **Outliers (IQR):** duration (4.7%), loudness (5.6%), tempo (0.6%). Kept, since they reflect the real diversity of the catalog rather than errors.
+- **Outliers (IQR):** duration (4.7%), loudness (5.6%), tempo (0.6%). Kept, since they reflect the real diversity of the catalogue rather than errors.
 - **Time series:** complete date grid. The 5 zero-count days for Pop are data-collection gaps (not true zeros), checked against the global market series, then set to missing.
 
 ## Key findings
@@ -41,9 +41,9 @@ MeloWave, a music streaming platform, wants to support its editorial decisions. 
 
 ## A critical look at the data
 
-- **Read the forecast as a trend:** the model systematically underestimates Pop on the test period. The 6-month forecast shows a direction and favorable periods, not an exact level. Its reliability decreases with the horizon.
+- **Read the forecast as a trend:** the model systematically underestimates Pop on the test period. The 6-month forecast shows a direction and favourable periods, not an exact level. Its reliability decreases with the horizon.
 - **End-of-period bias:** the file only lists tracks that entered the charts and collection stops in November 2020. Tracks released in late 2020 are undercounted, which weakens the release-pace forecast.
-- **Popularity of 0:** 10.5% of the catalog. Spotify's indicator reflects recent plays, so a zero often means a dormant track, not an uninteresting one.
+- **Popularity of 0:** 10.5% of the catalogue. Spotify's indicator reflects recent plays, so a zero often means a dormant track, not an uninteresting one.
 
 ## Repository contents
 
@@ -51,7 +51,8 @@ MeloWave, a music streaming platform, wants to support its editorial decisions. 
 |---|---|
 | `analyse_catalogue_melowave.ipynb` | Mission 1: data quality audit, audio profiling, statistical tests |
 | `prevision_activite.ipynb` | Mission 2: time series, Prophet, release pace |
-| `presentation_melowave.pdf` | Results presentation (in French) |
+| `presentation_melowave_en.pdf` | Results presentation (English) |
+| `presentation_melowave.pdf` | Results presentation (French) |
 | `requirements.txt` | Python libraries |
 | `README.md` / `README.en.md` | Documentation in French / English |
 
