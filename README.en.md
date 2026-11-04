@@ -1,74 +1,68 @@
-# Analyzing and anticipating music streaming trends (MeloWave)
+[Français](README.md) | **English**
 
-[🇫🇷 Français](README.md) · 🇬🇧 English
+# Catalog Audit, Statistical Tests & Forecasting (MeloWave)
 
-Project 9 of the **Data Analyst** program (OpenClassrooms): using Spotify data, I audit a music catalog, statistically test three editorial hypotheses, then forecast how often Pop appears in the global Top 200 using Prophet.
+## At a glance
 
-📄 **[View the presentation (PDF, 18 slides, in French)](presentation_melowave.pdf)**
+MeloWave, a music streaming platform, wants to support its editorial decisions. I audited its Spotify catalog, statistically tested three hypotheses from the editorial committee (Mission 1), then forecast Pop's presence in the global Top 200 with Prophet (Mission 2).
 
-## Business context
+- **Tools:** Python, pandas, SciPy, statsmodels, scikit-learn, Prophet, Matplotlib, Seaborn, Jupyter
+- **Volume:** 114,000 rows (89,740 unique tracks), daily charts 2017-2020
+- **Deliverables:** 2 notebooks, results presentation ([PDF, in French](presentation_melowave.pdf))
 
-The fictional platform **MeloWave** (a training scenario) asks its Head of Music Research to support its editorial decisions:
+---
 
-- **Mission 1 – Catalog**: is the catalog reliable, and what do the data say about audio features, popularity and explicit content?
-- **Mission 2 – Forecast**: how is Pop's presence in the global Top 200 evolving, and what can be anticipated over the next 6 months?
+## Data quality
 
-## Key results
+- **Missing values:** only on text fields (< 0.001% of rows); rows dropped with no bias on the audio analyses.
+- **Duplicates:** two working datasets. `df_genres` keeps every track-genre pair (113,549 rows); `df_tracks` is deduplicated on `track_id` (89,740 tracks). The same track can legitimately belong to several genres.
+- **Outliers (IQR):** duration (4.7%), loudness (5.6%), tempo (0.6%). Kept, since they reflect the real diversity of the catalog rather than errors.
+- **Time series:** complete date grid. The 5 zero-count days for Pop are data-collection gaps (not true zeros), checked against the global market series, then set to missing.
 
-### Mission 1 – Audit and statistical tests
+## Key findings
+
+### Mission 1: statistical tests
 
 | Committee question | Test (why) | Result | Business takeaway |
 |---|---|---|---|
-| Are audio features related? (`energy` / `loudness`) | Spearman (non-normal distributions) | ρ = 0.753, p < 10⁻¹⁵ | Energetic tracks are mastered louder: pick high-loudness tracks for "Workout" playlists |
-| Does popularity differ by genre? | Kruskal-Wallis (normality rejected) | H = 30,955, p < 10⁻¹⁵ | Don't treat all genres alike: target genres with high streaming potential |
+| Are audio features related? (`energy` / `loudness`) | Spearman (non-normal distributions) | ρ = 0.753, p < 10⁻¹⁵ | Energetic tracks are mastered louder: aim for high-loudness tracks for "Workout" playlists |
+| Does popularity differ by genre? | Kruskal-Wallis (normality rejected) | H = 30,955, p < 10⁻¹⁵ | Don't treat all genres alike: target those with high streaming potential |
 | Does explicit content depend on genre? | Chi-squared independence test | χ² ≈ 18,362, p < 10⁻¹⁵ | Filter explicit content upstream for general-audience playlists |
 
-Documented cleaning: 114,000 rows at the start, 113,549 track-genre pairs kept, 89,740 unique tracks (duplicate `track_id`s are multi-genre tracks, not errors). Outliers (IQR) are kept because they reflect the real diversity of the catalog.
+### Mission 2: Pop forecast (global Top 200)
 
-### Mission 2 – Pop forecast (global Top 200, 2017-2020)
+| Finding | Key figure |
+|---|---|
+| Pop is declining in the Top 200 | from about 87 tracks in 2017 to about 73 at the end of 2020 |
+| Strong yearly seasonality | peak in December (+9 tracks), dips in early July and early October (about −6) |
+| Weak weekly effect | about −2 tracks on Fridays and Saturdays |
+| Model quality (last 90 days held out) | MAE 17.8 tracks/day, RMSE 19.0, MAPE 23.3% |
+| Monthly release pace hard to predict | MAPE 20.8% |
 
-- **Series rebuilt on a complete date grid**: 5 zero-count days, all identified as data-collection gaps (not true zeros) by comparing with the global market series.
-- **Trend**: Pop is declining, from about 87 tracks in 2017 to about 73 at the end of 2020.
-- **Yearly seasonality**: peak in December (+9 tracks), dips in early July and early October (about −6).
-- **Forecast quality** (last 90 days held out): MAE 17.8 tracks/day, RMSE 19.0, MAPE 23.3%. The model systematically underestimates, so the 6-month forecast should be read as a **direction**, not an exact level.
-- **Monthly release pace**: unreliable forecast (MAPE 20.8%), weakened by an end-of-period bias (tracks released late 2020 had little time to reach the charts).
+## A critical look at the data
 
-## Limitations
+- **Read the forecast as a trend:** the model systematically underestimates Pop on the test period. The 6-month forecast shows a direction and favorable periods, not an exact level. Its reliability decreases with the horizon.
+- **End-of-period bias:** the file only lists tracks that entered the charts and collection stops in November 2020. Tracks released in late 2020 are undercounted, which weakens the release-pace forecast.
+- **Popularity of 0:** 10.5% of the catalog. Spotify's indicator reflects recent plays, so a zero often means a dormant track, not an uninteresting one.
 
-- The forecast assumes past patterns continue; reliability decreases with the horizon.
-- The data stop in November 2020.
-- Spotify popularity reflects recent plays: a score of 0 (10.5% of the catalog) often means a dormant track, not an uninteresting one.
+## Repository contents
 
-## Repository content
-
-| File | Purpose |
+| File | Description |
 |---|---|
 | `analyse_catalogue_melowave.ipynb` | Mission 1: data quality audit, audio profiling, statistical tests |
 | `prevision_activite.ipynb` | Mission 2: time series, Prophet, release pace |
-| `presentation_melowave.pdf` | Presentation slides (in French) |
-| `requirements.txt` | Required Python libraries |
+| `presentation_melowave.pdf` | Results presentation (in French) |
+| `requirements.txt` | Python libraries |
+| `README.md` / `README.en.md` | Documentation in French / English |
 
-Note: the notebooks are written in French.
+The notebooks are written in French.
 
 ## Reproduce the analysis
 
-1. Install Python 3.10 or newer.
-2. Create an environment and install the libraries:
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate        # Windows (Mac/Linux: source .venv/bin/activate)
-   pip install -r requirements.txt
-   ```
-3. Put the three data files in the same folder as the notebooks (not published here: they were provided as part of the OpenClassrooms project):
-   - `spotify-tracks-dataset-detailed.csv`
-   - `chart_tracks_genre_2017_2020.csv`
-   - `release_dates_genre_2017_2020.csv`
-4. Run `jupyter notebook` and execute the cells in order. Charts are already visible in the notebooks on GitHub, no need to run anything.
+1. Create an environment and install the libraries: `pip install -r requirements.txt`
+2. Put the three data files in the notebooks folder (not published here): `spotify-tracks-dataset-detailed.csv`, `chart_tracks_genre_2017_2020.csv`, `release_dates_genre_2017_2020.csv`
+3. Run `jupyter notebook` and execute the cells in order. Charts are already visible in the notebooks on GitHub.
 
-## Tools
+---
 
-Python · pandas · NumPy · SciPy · statsmodels · scikit-learn · Prophet · Matplotlib · Seaborn · Jupyter
-
-## Author
-
-**Lucas Pianezzi** — looking for a Data Analyst position.
+Project completed as part of the OpenClassrooms Data Analyst program.
