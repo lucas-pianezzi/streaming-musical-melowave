@@ -1,0 +1,15 @@
+# Données (non publiées : fournies dans le cadre du projet)
+*.csv
+
+# Version PowerPoint de la présentation (le PDF est publié à la place)
+*.pptx
+
+# Environnements et caches Python
+.venv/
+venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
